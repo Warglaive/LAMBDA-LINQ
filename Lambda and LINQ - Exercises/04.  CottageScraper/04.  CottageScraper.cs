@@ -1,46 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public class CottageScraper
+namespace _04.CottageScraper
 {
-    public static void Main()
+    public class Program
     {
-        var line = Console.ReadLine();
-        var dict = new Dictionary<string, List<decimal>>();
-        while (line != "chop chop")
+        public static void Main()
         {
-            var tokens = line.Split(new[] { ' ', '-', '>' }, StringSplitOptions.RemoveEmptyEntries);
-            var treeType = tokens[0];
-            var height = decimal.Parse(tokens[1]);
-            if (!dict.ContainsKey(treeType))
+            var result = new Dictionary<string, long>();
+            var input = Console.ReadLine();
+            while (input != "chop chop")
             {
-                dict[treeType] = new List<decimal>();
+                var token = input.Split(new[] { ' ', '-', '>' }, StringSplitOptions.RemoveEmptyEntries);
+                var type = token[0];
+                var height = long.Parse(token[1]);
+                input = Console.ReadLine();
             }
-            dict[treeType].Add(height);
-            line = Console.ReadLine();
+            var treeType = Console.ReadLine();
+            var MinLenghtPerTree = Console.ReadLine();
         }
-        var typeOfTree = Console.ReadLine();
-        var minLenghtPerTree = decimal.Parse(Console.ReadLine());
-        var pricePerMeter = Math.Round(GetThePricePerMeter(dict), 2);
-        var filteredUsedLogs = dict
-            .Where(x => x.Key.Equals(typeOfTree))
-            .SelectMany(x => x.Value.Where(y => y >= minLenghtPerTree)
-            .ToList());
-        var usedLogsPrice = Math.Round(filteredUsedLogs.Sum() * pricePerMeter, 2);
-        var unusedLogs = Math.Round(dict.Sum(x => x.Value.Sum()) - filteredUsedLogs.Sum(), 2);
-        var unusedLogsPrice = Math.Round(unusedLogs * pricePerMeter * 0.25m, 2);
-        var cottageScraperSubTotal = Math.Round(usedLogsPrice + unusedLogsPrice, 2);
-        Console.WriteLine($"Price per meter: ${pricePerMeter:f2}");
-        Console.WriteLine($"Used logs price: ${usedLogsPrice:f2}");
-        Console.WriteLine($"Unused logs price: ${unusedLogsPrice:f2}");
-        Console.WriteLine($"CottageScraper subtotal: ${cottageScraperSubTotal:f2}");
     }
-    private static decimal GetThePricePerMeter(Dictionary<string, List<decimal>> dict)
-    {
-        var sumOfAllLogs = dict.Sum(x => x.Value.Sum());
-        var count = dict.Values.Sum(x => x.Count);
 
-        return sumOfAllLogs / count;
-    }
 }
